@@ -14,7 +14,9 @@ Takes an image as input and returns poetry generated from the image. Currently i
 
 	`imageUri - uri to download the image from Transloadit`
 
-	`idToken - Firebase Id token`
+* **Header Params**
+
+	`Authorization: Token <Firebase Id token>`
 
 * **Success Response**
 
@@ -23,7 +25,8 @@ Takes an image as input and returns poetry generated from the image. Currently i
 
 * **Error Response**
   * **Code:** 401 UNAUTHORIZED   
-    **Content:** `{error: "login"}`  
+    **Content:** `WWW-Authenticate: Token realm="Authentication Required"`
+
   
   * **Code:** 402 INVALID INPUT  
     **Content:** `{error: "Invalid input type: audio or video"}`
@@ -37,8 +40,8 @@ Takes an image as input and returns poetry generated from the image. Currently i
 import request from 'superagent'
 
 request.get('/poetry')
+       .set('Authorization': 'Token ' + verySecretIdToken)
        .query({ imageUri: 'https://api2.transloadit.com/assemblies/myAssemblyId' })
-       .query({ idToken: 'verysecritidtoken'})
        .end(function(err, res){
        		...
        });
