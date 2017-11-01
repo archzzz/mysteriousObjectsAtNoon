@@ -77,8 +77,7 @@ def get_poetry(folder_name):
 api.add_resource(Brittany, '/poetry')
 
 if __name__ == '__main__':
-    app.run()
-
+    app.run(host="0.0.0.0")
 
 
 
