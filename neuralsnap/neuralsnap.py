@@ -69,8 +69,8 @@ class ImageNarrator(object):
         # a different location
 
         self.SCRIPT_PATH = os.getcwd()
-        self.NEURALTALK2_PATH = "/Users/annzhang/PycharmProjects/brittanyService/lib/neuraltalk2"
-        self.CHARRNN_PATH = "/Users/annzhang/PycharmProjects/brittanyService/lib/char-rnn"
+        self.NEURALTALK2_PATH = "/opt/neural-networks/mysteriousObjectsAtNoon/lib/neuraltalk2"
+        self.CHARRNN_PATH = "/opt/neural-networks/mysteriousObjectsAtNoon/lib/char-rnn"
 
         self.expansion_obj_list = list()
         self.caption_list = list()
