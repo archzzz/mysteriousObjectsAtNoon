@@ -13,7 +13,7 @@ app = Flask(__name__, instance_path='/tmp/instance')
 api = Api(app)
 http_token_auth = HTTPTokenAuth(scheme='Token')
 
-cred = credentials.Certificate('/Users/annzhang/workspace/blazing-heat-1438-firebase-adminsdk-h3irc-12eaf69af0.json')
+cred = credentials.Certificate('/opt/neural-networks/transloadit-key.json')
 firebase_app = initialize_app(cred)
 
 
@@ -64,8 +64,8 @@ def get_image_from_transloadit(url, folder_name):
 def get_poetry(folder_name):
 
     output_title = 'test'
-    rnn_model_fp = '/Users/annzhang/PycharmProjects/brittanyService/neuralsnap/models/2016-01-12_char-rnn_model_01_rg.t7'
-    ntalk_model_fp = '/Users/annzhang/PycharmProjects/brittanyService/neuralsnap/models/2016-01-12_neuraltalk2_model_01_rg.t7'
+    rnn_model_fp = '/opt/neural-networks/mysteriousObjectsAtNoon/neuralsnap/models/2016-01-12_char-rnn_model_01_rg.t7'
+    ntalk_model_fp = '/opt/neural-networks/mysteriousObjectsAtNoon/neuralsnap/models/2016-01-12_neuraltalk2_model_01_rg.t7'
     image_folder_fp = os.path.join(app.instance_path, folder_name)
 
     expander = neuralsnap.ImageNarrator(output_title, ntalk_model_fp, rnn_model_fp, image_folder_fp)
