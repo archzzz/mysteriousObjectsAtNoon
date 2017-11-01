@@ -9,7 +9,7 @@ import os
 from neuralsnap import neuralsnap
 from temporaryDirectory import TemporaryDirectory
 
-app = Flask(__name__, instance_path='/tmp/instance')
+app = Flask(__name__)
 api = Api(app)
 http_token_auth = HTTPTokenAuth(scheme='Token')
 
@@ -66,9 +66,8 @@ def get_poetry(folder_name):
     output_title = 'test'
     rnn_model_fp = '/opt/neural-networks/mysteriousObjectsAtNoon/neuralsnap/models/2016-01-12_char-rnn_model_01_rg.t7'
     ntalk_model_fp = '/opt/neural-networks/mysteriousObjectsAtNoon/neuralsnap/models/2016-01-12_neuraltalk2_model_01_rg.t7'
-    image_folder_fp = os.path.join(app.instance_path, folder_name)
 
-    expander = neuralsnap.ImageNarrator(output_title, ntalk_model_fp, rnn_model_fp, image_folder_fp)
+    expander = neuralsnap.ImageNarrator(output_title, ntalk_model_fp, rnn_model_fp, folder_name)
 
     result = expander.get_result()
     return result[0]
