@@ -4,6 +4,7 @@ MAINTAINER Samuel Cozannet <samuel.cozannet@madeden.com>
 
 ENV MODEL_NEURALTALK "https://s3.amazonaws.com/rossgoodwin/models/2016-01-12_neuraltalk2_model_01_rg.t7"
 ENV MODEL_CHARNN "https://s3.amazonaws.com/rossgoodwin/models/2016-01-12_char-rnn_model_01_rg.t7"
+ENV FIREBASE_CREDENTIAL "config/blazing-heat-1438-firebase-adminsdk-h3irc-12eaf69af0.json"
 
 RUN apt-get update 
 RUN sudo apt-get -y install \
@@ -82,30 +83,15 @@ RUN cd /opt/neural-networks && \
     wget $MODEL_CHARNN
 
 RUN pip install firebase-admin
-ADD config/blazing-heat-1438-firebase-adminsdk-h3irc-12eaf69af0.json /opt/neural-networks/transloadit-key.json
-
-# Downloading NeuralTalk
-# RUN cd /opt/neural-networks/ && \
-#    git clone https://github.com/karpathy/neuraltalk2
+ADD FIREBASE_CREDENTIAL /opt/neural-networks/firebase-key.json
 
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Adding folders a local stuff 
-# RUN mkdir -p /data/model /data/images 
 
 # VOLUME /data
 
 # Expose default port
 expose 5000
-
-# ADD install.sh /opt/neural-networks/install.sh
-# ADD run.sh run.sh
-
-# RUN chmod +x /opt/neural-networks/install.sh && \
-#     chown root:root /opt/neural-networks/install.sh && \
-#     chmod +x run.sh && \
-#     chown root:root run.sh
 
 
 CMD [ "python", "-u", "/opt/neural-networks/mysteriousObjectsAtNoon/brittanyService.py"]
