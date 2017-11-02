@@ -13,7 +13,7 @@ app = Flask(__name__)
 api = Api(app)
 http_token_auth = HTTPTokenAuth(scheme='Token')
 
-cred = credentials.Certificate('/opt/neural-networks/transloadit-key.json')
+cred = credentials.Certificate('/opt/neural-networks/firebase-key.json')
 firebase_app = initialize_app(cred)
 
 
