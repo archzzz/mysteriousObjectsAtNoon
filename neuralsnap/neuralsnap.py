@@ -92,7 +92,7 @@ class ImageNarrator(object):
     def neuraltalk(self):
         # NeuralTalk2 Image Captioning
 
-        os.chdir(self.NEURALTALK2_PATH)
+        # os.chdir(self.NEURALTALK2_PATH)
 
         ntalk_cmd_list = [
             'th',
@@ -109,7 +109,7 @@ class ImageNarrator(object):
 
         print "INIT NEURALTALK2 CAPTIONING"
 
-        ntalk_proc = subprocess.Popen(ntalk_cmd_list)
+        ntalk_proc = subprocess.Popen(ntalk_cmd_list, cwd=self.NEURALTALK2_PATH)
         print ntalk_proc.communicate()[0]
 
 
@@ -122,7 +122,7 @@ class ImageNarrator(object):
         # RNN Caption Expansion
 
 
-        os.chdir(self.CHARRNN_PATH)
+        # os.chdir(self.CHARRNN_PATH)
 
         print "INIT CHAR-RNN EXPANSION"
 
@@ -152,7 +152,8 @@ class ImageNarrator(object):
 
             rnn_proc = subprocess.Popen(
                 rnn_cmd_list,
-                stdout=subprocess.PIPE
+                stdout=subprocess.PIPE,
+                cwd=self.CHARRNN_PATH
             )
             expansion = rnn_proc.stdout.read()
             
