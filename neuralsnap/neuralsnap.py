@@ -42,11 +42,6 @@ import re
 from string import Template
 from pprint import pprint
 
-def setUser(uid):
-    def result():
-        os.setuid(uid)
-    return result
-
 class ImageNarrator(object):
 
     def __init__(self, output_title, ntalk_model_fp, rnn_model_fp, image_folder_fp,
@@ -114,7 +109,7 @@ class ImageNarrator(object):
 
         print "INIT NEURALTALK2 CAPTIONING"
 
-        ntalk_proc = subprocess.Popen(ntalk_cmd_list, cwd=self.NEURALTALK2_PATH, preexec_fn=setUser(os.getuid()))
+        ntalk_proc = subprocess.Popen(ntalk_cmd_list, cwd=self.NEURALTALK2_PATH)
         print ntalk_proc.communicate()[0]
 
 
