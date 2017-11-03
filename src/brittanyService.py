@@ -1,11 +1,12 @@
-from flask import Flask
-from flask_restful import Resource, Api, reqparse
-from flask_httpauth import HTTPTokenAuth
-from firebase_admin import credentials, auth, initialize_app
-import requests
 import json
-from pprint import pprint
 import os
+
+import requests
+from firebase_admin import credentials, initialize_app
+from flask import Flask
+from flask_httpauth import HTTPTokenAuth
+from flask_restful import Resource, Api, reqparse
+
 import neuralsnap
 from temporaryDirectory import TemporaryDirectory
 

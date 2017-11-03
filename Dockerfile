@@ -4,7 +4,7 @@ MAINTAINER Samuel Cozannet <samuel.cozannet@madeden.com>
 
 ENV MODEL_NEURALTALK "https://s3.amazonaws.com/rossgoodwin/models/2016-01-12_neuraltalk2_model_01_rg.t7"
 ENV MODEL_CHARNN "https://s3.amazonaws.com/rossgoodwin/models/2016-01-12_char-rnn_model_01_rg.t7"
-ENV FIREBASE_CREDENTIAL "config/blazing-heat-1438-firebase-adminsdk-h3irc-12eaf69af0.json"
+ENV FIREBASE_CREDENTIAL "blazing-heat-1438-firebase-adminsdk-h3irc-12eaf69af0.json"
 
 RUN apt-get update 
 RUN sudo apt-get -y install \
@@ -32,8 +32,8 @@ RUN cd /opt/neural-networks && \
     cd /opt/neural-networks/torch && \
     ./install.sh -b 
 
-# ENV PATH="/opt/neural-networks/torch/install/bin:${PATH}"
-RUN /bin/bash -c "source ~/.bashrc"
+ENV PATH="/opt/neural-networks/torch/install/bin:${PATH}"
+# RUN /bin/bash -c "source ~/.bashrc"
 
 # Install additional dependencies
 RUN cd /opt/neural-networks/torch && \
@@ -68,16 +68,12 @@ RUN cd /opt/neural-networks/ && \
 RUN pip install flask-restful && \
     pip install Flask-HTTPAuth
 
-# Download mysteriousObjectsAtNoon
-RUN cd /opt/neural-networks && \
-    git clone "https://github.com/archzzz/mysteriousObjectsAtNoon.git" && \
-
 # Download neuraltalk2 and cahr-rnn
 RUN cd /opt/neural-networks && \
     mkdir lib && \
     cd lib && \
     git clone "https://github.com/archzzz/neuraltalk2.git" && \
-    git clone "https://github.com/karpathy/char-rnn.git" && \
+    git clone "https://github.com/karpathy/char-rnn.git"
 
 # Download modals
 RUN cd /opt/neural-networks && \
@@ -89,6 +85,10 @@ RUN cd /opt/neural-networks && \
 RUN pip install firebase-admin
 ADD $FIREBASE_CREDENTIAL /opt/neural-networks/firebase-key.json
 
+RUN cd /opt/ && \
+    mkdir server
+ADD src /opt/server/src
+
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -98,4 +98,4 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 expose 5000
 
 
-CMD [ "python", "-u", "/opt/neural-networks/mysteriousObjectsAtNoon/brittanyService.py"]
+CMD [ "python", "-u", "/opt/server/src/brittanyService.py"]
