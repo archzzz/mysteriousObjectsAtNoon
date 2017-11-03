@@ -6,7 +6,7 @@ import requests
 import json
 from pprint import pprint
 import os
-from neuralsnap import neuralsnap
+import neuralsnap
 from temporaryDirectory import TemporaryDirectory
 
 app = Flask(__name__)
@@ -19,10 +19,8 @@ firebase_app = initialize_app(cred)
 
 @http_token_auth.verify_token
 def verify_token(token):
-    # print 'Token: %s' % token
     # try:
     #     decoded_token = auth.verify_id_token(token)
-    #     print decoded_token
     #     return True
     # except ValueError:
     #     print 'Authentication failed'
@@ -62,12 +60,10 @@ def get_image_from_transloadit(url, folder_name):
 
 
 def get_poetry(folder_name):
+    rnn_model_fp = '/opt/neural-networks/models/2016-01-12_char-rnn_model_01_rg.t7'
+    ntalk_model_fp = '/opt/neural-networks/models/2016-01-12_neuraltalk2_model_01_rg.t7'
 
-    output_title = 'test'
-    rnn_model_fp = '/opt/neural-networks/mysteriousObjectsAtNoon/neuralsnap/models/2016-01-12_char-rnn_model_01_rg.t7'
-    ntalk_model_fp = '/opt/neural-networks/mysteriousObjectsAtNoon/neuralsnap/models/2016-01-12_neuraltalk2_model_01_rg.t7'
-
-    expander = neuralsnap.ImageNarrator(output_title, ntalk_model_fp, rnn_model_fp, folder_name)
+    expander = neuralsnap.ImageNarrator(ntalk_model_fp, rnn_model_fp, folder_name)
 
     result = expander.get_result()
     return result[0]

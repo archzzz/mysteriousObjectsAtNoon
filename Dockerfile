@@ -68,22 +68,26 @@ RUN cd /opt/neural-networks/ && \
 RUN pip install flask-restful && \
     pip install Flask-HTTPAuth
 
-# Download and set up service
+# Download mysteriousObjectsAtNoon
 RUN cd /opt/neural-networks && \
-    cd /opt/neural-networks && \
-    cd /opt/neural-networks && \ 
-    cd /opt/neural-networks && \
-    cd /opt/neural-networks && \
     git clone "https://github.com/archzzz/mysteriousObjectsAtNoon.git" && \
-    cd /opt/neural-networks/mysteriousObjectsAtNoon/lib && \
+
+# Download neuraltalk2 and cahr-rnn
+RUN cd /opt/neural-networks && \
+    mkdir lib && \
+    cd lib && \
     git clone "https://github.com/archzzz/neuraltalk2.git" && \
     git clone "https://github.com/karpathy/char-rnn.git" && \
-    cd /opt/neural-networks/mysteriousObjectsAtNoon/neuralsnap/models && \
+
+# Download modals
+RUN cd /opt/neural-networks && \
+    mkdir models && \
+    cd models && \
     wget $MODEL_NEURALTALK && \
     wget $MODEL_CHARNN
 
 RUN pip install firebase-admin
-ADD FIREBASE_CREDENTIAL /opt/neural-networks/firebase-key.json
+ADD $FIREBASE_CREDENTIAL /opt/neural-networks/firebase-key.json
 
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
