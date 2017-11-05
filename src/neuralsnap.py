@@ -39,6 +39,7 @@ import subprocess
 import json
 from pprint import pprint
 import time
+from subprocess import PIPE
 
 
 class ImageNarrator(object):
@@ -85,8 +86,10 @@ class ImageNarrator(object):
 
         print "INIT NEURALTALK2 CAPTIONING"
 
-        ntalk_proc = subprocess.Popen(ntalk_cmd_list, cwd=self.NEURALTALK2_PATH)
-        print ntalk_proc.communicate()[0]
+        ntalk_proc = subprocess.Popen(ntalk_cmd_list, stdout=PIPE, stderr=PIPE, cwd=self.NEURALTALK2_PATH)
+        output, error = ntalk_proc.communicate()
+        if ntalk_proc.returncode != 0:
+            raise Exception("Neural talk failed: %d %s, %s" % (ntalk_proc.returncode, output, error))
 
     def charnn(self, caption_obj_list):
         expansion_obj_list = list()
