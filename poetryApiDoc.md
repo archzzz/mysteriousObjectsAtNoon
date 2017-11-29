@@ -13,6 +13,7 @@ Takes an image as input and returns poetry generated from the image. Currently i
 * **URL Params**
 
 	`imageUri - uri to download the image from Transloadit`
+	`mime - image mime type`
 
 * **Header Params**
 
