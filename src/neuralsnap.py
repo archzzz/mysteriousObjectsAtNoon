@@ -55,8 +55,8 @@ class ImageNarrator(object):
         self.num_steps = num_steps
         self.tgt_steps = tgt_steps
 
-        self.NEURALTALK2_PATH = "/opt/neural-networks/lib/neuraltalk2"
-        self.CHARRNN_PATH = "/opt/neural-networks/lib/char-rnn"
+        self.NEURALTALK2_PATH = "/Users/annzhang/PycharmProjects/brittanyService/lib/neuraltalk2"
+        self.CHARRNN_PATH = "/Users/annzhang/PycharmProjects/brittanyService/lib/char-rnn"
 
     def get_neuralsnap_result(self):
         self.neuraltalk()
@@ -69,21 +69,10 @@ class ImageNarrator(object):
 
         return self.charnn(caption_obj_list)
 
-    def get_video_captions(self, video_path):
-
-
-
-
-
-
-
+    def get_video_captions(self):
         self.neuraltalk()
         with open(self.image_folder_fp +'/vis.json') as caption_json:
             return json.load(caption_json)
-
-    def get_frames_from_video(self, video):
-        vidcap = cv2.VideoCapture(video)
-        success, image = vidcap.read()
 
 
     def neuraltalk(self):
