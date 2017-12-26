@@ -44,13 +44,13 @@ from subprocess import PIPE
 
 class ImageNarrator(object):
 
-    def __init__(self, ntalk_model_fp, rnn_model_fp, image_folder_fp,
+    def __init__(self, ntalk_model_fp, rnn_model_fp, image_folder_fp, num_images,
                  stanza_len=512, num_steps=16, tgt_steps=[9]):
         self.ntalk_model_fp = ntalk_model_fp
         self.rnn_model_fp = rnn_model_fp
         self.image_folder_fp = image_folder_fp
 
-        self.num_images = '1'
+        self.num_images = num_images
         self.stanza_len = str(stanza_len)
         self.num_steps = num_steps
         self.tgt_steps = tgt_steps
@@ -58,7 +58,7 @@ class ImageNarrator(object):
         self.NEURALTALK2_PATH = "/opt/neural-networks/lib/neuraltalk2"
         self.CHARRNN_PATH = "/opt/neural-networks/lib/char-rnn"
 
-    def get_result(self):
+    def get_neuralsnap_result(self):
         self.neuraltalk()
 
         with open(self.image_folder_fp +'/vis.json') as caption_json:
@@ -68,6 +68,23 @@ class ImageNarrator(object):
             raise Exception("Image folder should have only one image, not {}".format(len(caption_obj_list)))
 
         return self.charnn(caption_obj_list)
+
+    def get_video_captions(self, video_path):
+
+
+
+
+
+
+
+        self.neuraltalk()
+        with open(self.image_folder_fp +'/vis.json') as caption_json:
+            return json.load(caption_json)
+
+    def get_frames_from_video(self, video):
+        vidcap = cv2.VideoCapture(video)
+        success, image = vidcap.read()
+
 
     def neuraltalk(self):
         # NeuralTalk2 Image Captioning
@@ -142,7 +159,7 @@ if __name__ == '__main__':
 
     script, ntalk_model_fp, rnn_model_fp, image_folder_fp = sys.argv
     expander = ImageNarrator(ntalk_model_fp, rnn_model_fp, image_folder_fp)
-    result = expander.get_result()
+    result = expander.get_neuralsnap_result()
     pprint(result)
 
     end_time = time.time()

@@ -33,7 +33,6 @@ RUN cd /opt/neural-networks && \
     ./install.sh -b 
 
 ENV PATH="/opt/neural-networks/torch/install/bin:${PATH}"
-# RUN /bin/bash -c "source ~/.bashrc"
 
 # Install additional dependencies
 RUN cd /opt/neural-networks/torch && \
@@ -66,7 +65,11 @@ RUN cd /opt/neural-networks/ && \
 
 # Install flask
 RUN pip install flask-restful && \
-    pip install Flask-HTTPAuth
+    pip install Flask-HTTPAuth && \
+    pip install -U flask-cors
+
+# Install transloadit
+RUN pip install pytransloadit
 
 # Download neuraltalk2 and cahr-rnn
 RUN cd /opt/neural-networks && \
@@ -84,6 +87,7 @@ RUN cd /opt/neural-networks && \
 
 RUN pip install firebase-admin
 ADD $FIREBASE_CREDENTIAL /opt/neural-networks/firebase-key.json
+ADD "app-config.cfg" /opt/neural-networks/app-config.cfg
 
 RUN cd /opt/ && \
     mkdir server
@@ -92,10 +96,8 @@ ADD src /opt/server/src
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# VOLUME /data
-
 # Expose default port
 expose 5000
 
 
-CMD [ "python", "-u", "/opt/server/src/brittanyService.py"]
+CMD [ "python", "-u", "/opt/server/src/pondService.py"]

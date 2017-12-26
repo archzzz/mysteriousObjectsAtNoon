@@ -1,7 +1,5 @@
-FROM nvidia/cuda:8.0-cudnn7-devel-ubuntu14.04
+FROM nvidia/cuda:7.5-cudnn5-devel-ubuntu14.04
 
-ENV MODEL_NEURALTALK "https://s3.amazonaws.com/rossgoodwin/models/2016-01-12_neuraltalk2_model_01_rg.t7"
-ENV MODEL_CHARNN "https://s3.amazonaws.com/rossgoodwin/models/2016-01-12_char-rnn_model_01_rg.t7"
 ENV FIREBASE_CREDENTIAL "blazing-heat-1438-firebase-adminsdk-h3irc-12eaf69af0.json"
 
 RUN apt-get update
@@ -91,12 +89,9 @@ RUN cd /opt/neural-networks && \
 # fix torch TestSuite null
 RUN luarocks install torch
 
-# Download modals
-RUN cd /opt/neural-networks && \
-    mkdir models && \
-    cd models && \
-    wget $MODEL_NEURALTALK && \
-    wget $MODEL_CHARNN
+# Add models
+RUN mkdir /opt/neural-networks/models
+ADD models/*.t7 /opt/neural-networks/models/
 
 RUN pip install firebase-admin
 ADD $FIREBASE_CREDENTIAL /opt/neural-networks/firebase-key.json
@@ -104,6 +99,8 @@ ADD $FIREBASE_CREDENTIAL /opt/neural-networks/firebase-key.json
 RUN cd /opt/ && \
     mkdir server
 ADD src /opt/server/src
+
+ENV LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
 
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
