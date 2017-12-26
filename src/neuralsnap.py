@@ -44,7 +44,7 @@ from subprocess import PIPE
 
 class ImageNarrator(object):
 
-    def __init__(self, ntalk_model_fp, rnn_model_fp, image_folder_fp, num_images,
+    def __init__(self, ntalk_model_fp, ntalk_lib_path, rnn_model_fp, rnn_lib_path, image_folder_fp, num_images,
                  stanza_len=512, num_steps=16, tgt_steps=[9]):
         self.ntalk_model_fp = ntalk_model_fp
         self.rnn_model_fp = rnn_model_fp
@@ -55,8 +55,8 @@ class ImageNarrator(object):
         self.num_steps = num_steps
         self.tgt_steps = tgt_steps
 
-        self.NEURALTALK2_PATH = "/Users/annzhang/PycharmProjects/brittanyService/lib/neuraltalk2"
-        self.CHARRNN_PATH = "/Users/annzhang/PycharmProjects/brittanyService/lib/char-rnn"
+        self.ntalk_lib_path = ntalk_lib_path
+        self.rnn_lib_path = rnn_lib_path
 
     def get_neuralsnap_result(self):
         self.neuraltalk()
@@ -91,7 +91,7 @@ class ImageNarrator(object):
 
         print "INIT NEURALTALK2 CAPTIONING"
 
-        ntalk_proc = subprocess.Popen(ntalk_cmd_list, stdout=PIPE, stderr=PIPE, cwd=self.NEURALTALK2_PATH)
+        ntalk_proc = subprocess.Popen(ntalk_cmd_list, stdout=PIPE, stderr=PIPE, cwd=self.ntalk_lib_path)
         output, error = ntalk_proc.communicate()
         if ntalk_proc.returncode != 0:
             raise Exception("Neural talk failed: %d %s, %s" % (ntalk_proc.returncode, output, error))
@@ -126,7 +126,7 @@ class ImageNarrator(object):
                 '-1'
             ]
 
-            rnn_proc = subprocess.Popen(rnn_cmd_list, stdout=PIPE, stderr=PIPE, cwd=self.CHARRNN_PATH)
+            rnn_proc = subprocess.Popen(rnn_cmd_list, stdout=PIPE, stderr=PIPE, cwd=self.rnn_lib_path)
 
             expansion, error = rnn_proc.communicate()
             if rnn_proc.returncode != 0:

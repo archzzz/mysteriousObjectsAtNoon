@@ -23,8 +23,6 @@ firebase_app = initialize_app(cred)
 
 transloadit_client = client.Transloadit(app.config['TRANSLOADIT_KEY'], app.config['TRANSLOADIT_SECRET'])
 
-RNN_MODEL = app.config["RNN_MODEL_PATH"]
-NEURALTALK_MODEL = app.config["NEURALTALK_MODEL_PATH"]
 IMAGE_URI = 'imageUri'
 VIDEO_URI = 'videoUri'
 MIME = 'mime'
@@ -65,9 +63,7 @@ class PoetryApi(Resource):
 
     @staticmethod
     def get_poetry(folder_name):
-        narrator = neuralsnap.ImageNarrator(NEURALTALK_MODEL, RNN_MODEL, folder_name, "1")
-        result = narrator.get_neuralsnap_result()
-        return result[0]
+        return get_image_narrator(folder_name, num_images=1).get_neuralsnap_result()[0]
 
 
 class CaptionApi(Resource):
@@ -103,8 +99,7 @@ class CaptionApi(Resource):
 
     @staticmethod
     def get_video_caption(folder_name):
-        expander = neuralsnap.ImageNarrator(NEURALTALK_MODEL, RNN_MODEL, folder_name, "-1")
-        return expander.get_video_captions()
+        return get_image_narrator(folder_name).get_video_captions()
 
 
 class MediaDownloader(object):
@@ -134,6 +129,16 @@ def download_media(url, folder_name, file_name):
     with open(os.path.join(folder_name, file_name), 'wb') as f:
         f.write(image_data)
         return f.name
+
+
+def get_image_narrator(folder_name, num_images=-1):
+    return neuralsnap.ImageNarrator(
+        app.config["NEURALTALK_MODEL_PATH"],
+        app.config["NEURALTALK_LIB_PATH"],
+        app.config["RNN_MODEL_PATH"],
+        app.config["RNN_LIB_PATH"],
+        folder_name,
+        str(num_images))
 
 
 api.add_resource(PoetryApi, '/poetry')
