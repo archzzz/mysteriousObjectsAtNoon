@@ -30,6 +30,7 @@ VIDEO_URI = 'videoUri'
 MIME = 'mime'
 VIDEO_DURATION = 'duration'
 
+
 @http_token_auth.verify_token
 def verify_token(token):
     if app.config["ENABLE_AUTH"]:
@@ -41,10 +42,11 @@ def verify_token(token):
             return False
     return True
 
+
 class PoetryApi(Resource):
     parse = reqparse.RequestParser()
     parse.add_argument(IMAGE_URI, type=str)
-    parse.add_argument(MIME, type=str)
+    parse.add_argument(MIME, type=str, default="")
 
     decorators = [http_token_auth.login_required]
 
@@ -52,11 +54,11 @@ class PoetryApi(Resource):
         args = self.parse.parse_args()
         mime = args[MIME].split('/')
 
-        if mime == None or mime[0] != 'image':
+        if mime[0] != 'image':
             abort(400, "Invalid input type: audio or video")
 
         with TemporaryDirectory() as temp_dir:
-            download_media(args[IMAGE_URI], mime[1], temp_dir)
+            download_media(args[IMAGE_URI], temp_dir, "img.{}".format(mime[1]))
             result = self.get_poetry(temp_dir)
 
         return {'poetry': result['text']}
@@ -71,8 +73,8 @@ class PoetryApi(Resource):
 class CaptionApi(Resource):
     parse = reqparse.RequestParser()
     parse.add_argument(VIDEO_URI, type=str)
-    parse.add_argument(MIME, type=str)
-    parse.add_argument(VIDEO_DURATION, type=float)
+    parse.add_argument(MIME, type=str, default="")
+    parse.add_argument(VIDEO_DURATION, type=float, default=2)
 
     decorators = [http_token_auth.login_required]
 
@@ -80,7 +82,7 @@ class CaptionApi(Resource):
         args = self.parse.parse_args()
         mime = args[MIME].split('/')
 
-        if mime == None or mime[0] != 'video':
+        if mime[0] != 'video':
             abort(400, "Invalid input type: image or audio")
 
         with TemporaryDirectory() as temp_dir:

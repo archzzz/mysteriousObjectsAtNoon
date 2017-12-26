@@ -71,9 +71,8 @@ class ImageNarrator(object):
 
     def get_video_captions(self):
         self.neuraltalk()
-        with open(self.image_folder_fp +'/vis.json') as caption_json:
+        with open(self.image_folder_fp + '/vis.json') as caption_json:
             return json.load(caption_json)
-
 
     def neuraltalk(self):
         # NeuralTalk2 Image Captioning
@@ -127,13 +126,12 @@ class ImageNarrator(object):
                 '-1'
             ]
 
-            rnn_proc = subprocess.Popen(
-                rnn_cmd_list,
-                stdout=subprocess.PIPE,
-                cwd=self.CHARRNN_PATH
-            )
-            expansion = rnn_proc.stdout.read()
-            
+            rnn_proc = subprocess.Popen(rnn_cmd_list, stdout=PIPE, stderr=PIPE, cwd=self.CHARRNN_PATH)
+
+            expansion, error = rnn_proc.communicate()
+            if rnn_proc.returncode != 0:
+                raise Exception("RNN failed with code: %d and error: %s" % (rnn_proc.returncode, error))
+
             expansion_obj_list.append({
                 'id': obj['image_id'],
                 'text': expansion
