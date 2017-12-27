@@ -13,6 +13,7 @@ Takes an image as input and returns poetry generated from the image. Currently i
 * **URL Params**
 
 	`imageUri - uri to download the image from Transloadit`
+	`mime - image mime type`
 
 * **Header Params**
 
@@ -24,15 +25,9 @@ Takes an image as input and returns poetry generated from the image. Currently i
   * **Content:** `{poetry: <poetry content>}`
 
 * **Error Response**
-  * **Code:** 401 UNAUTHORIZED   
-    **Content:** `WWW-Authenticate: Token realm="Authentication Required"`
-
-  
-  * **Code:** 402 INVALID INPUT  
-    **Content:** `{error: "Invalid input type: audio or video"}`
-    
-  * **Code:** 404 NOT FOUND  
-    **Content:** `{error: "Cannot find resource."}`
+  * **Code:** 400 Bad Request
+  * **Code:** 401 Unauthorized    
+  * **Code:** 404 Not Found  
 
 * **Sample Usage**
 
