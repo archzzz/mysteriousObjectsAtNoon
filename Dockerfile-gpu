@@ -96,7 +96,8 @@ RUN luarocks install torch
 
 # Add models
 RUN mkdir /opt/neural-networks/models
-ADD models/*.t7 /opt/neural-networks/models/
+ADD models/neuraltalk2_model_01.t7 /opt/neural-networks/models/neuraltalk2_model_01.t7
+ADD models/char-rnn_model_gpu_01.t7 /opt/neural-networks/models/char-rnn_model_gpu_01.t7
 
 RUN pip install firebase-admin
 ADD config/$FIREBASE_CREDENTIAL /opt/neural-networks/firebase-key.json

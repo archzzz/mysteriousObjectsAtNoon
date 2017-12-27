@@ -141,7 +141,8 @@ def get_image_narrator(folder_name, num_images=-1):
         app.config["RNN_MODEL_PATH"],
         app.config["RNN_LIB_PATH"],
         folder_name,
-        str(num_images))
+        str(num_images),
+        enable_gpu=app.config["ENABLE_GPU"])
 
 
 api.add_resource(PoetryApi, '/poetry')

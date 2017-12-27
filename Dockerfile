@@ -2,8 +2,6 @@ FROM ubuntu:trusty
 
 MAINTAINER Samuel Cozannet <samuel.cozannet@madeden.com>
 
-ENV MODEL_NEURALTALK "https://s3.amazonaws.com/rossgoodwin/models/2016-01-12_neuraltalk2_model_01_rg.t7"
-ENV MODEL_CHARNN "https://s3.amazonaws.com/rossgoodwin/models/2016-01-12_char-rnn_model_01_rg.t7"
 ENV FIREBASE_CREDENTIAL "config/blazing-heat-1438-firebase-adminsdk-h3irc-12eaf69af0.json"
 
 RUN apt-get update 
@@ -79,12 +77,10 @@ RUN cd /opt/neural-networks && \
     git clone "https://github.com/archzzz/neuraltalk2.git" && \
     git clone "https://github.com/karpathy/char-rnn.git"
 
-# Download models
-RUN cd /opt/neural-networks && \
-    mkdir models && \
-    cd models && \
-    wget $MODEL_NEURALTALK && \
-    wget $MODEL_CHARNN
+# Add models
+RUN mkdir /opt/neural-networks/models
+ADD models/neuraltalk2_model_01.t7 /opt/neural-networks/models/neuraltalk2_model_01.t7
+ADD models/char-rnn_model_cpu_01.t7 /opt/neural-networks/models/char-rnn_model_cpu_01.t7
 
 # Install and initialize firebase
 RUN pip install firebase-admin

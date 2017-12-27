@@ -17,5 +17,6 @@ export AWS_SECRET_ACCESS_KEY=$2
 
 rm -f *.t7*
 
-aws s3 cp s3://pond-service/models/2016-01-12_char-rnn_model_01_rg.t7 2016-01-12_char-rnn_model_01_rg.t7
-aws s3 cp s3://pond-service/models/2016-01-12_neuraltalk2_model_01_rg.t7 2016-01-12_neuraltalk2_model_01_rg.t7
+aws s3 cp s3://pond-service/models/char-rnn_model_cpu_01.t7 char-rnn_model_cpu_01.t7
+aws s3 cp s3://pond-service/models/char-rnn_model_gpu_01.t7 char-rnn_model_gpu_01.t7
+aws s3 cp s3://pond-service/models/neuraltalk2_model_01.t7 neuraltalk2_model_01.t7

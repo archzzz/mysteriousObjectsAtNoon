@@ -45,7 +45,7 @@ from subprocess import PIPE
 class ImageNarrator(object):
 
     def __init__(self, ntalk_model_fp, ntalk_lib_path, rnn_model_fp, rnn_lib_path, image_folder_fp, num_images,
-                 stanza_len=512, num_steps=16, tgt_steps=[9]):
+                 stanza_len=512, num_steps=16, tgt_steps=[9], enable_gpu=False):
         self.ntalk_model_fp = ntalk_model_fp
         self.rnn_model_fp = rnn_model_fp
         self.image_folder_fp = image_folder_fp
@@ -57,6 +57,8 @@ class ImageNarrator(object):
 
         self.ntalk_lib_path = ntalk_lib_path
         self.rnn_lib_path = rnn_lib_path
+
+        self.enable_gpu = enable_gpu
 
     def get_neuralsnap_result(self):
         self.neuraltalk()
@@ -86,7 +88,7 @@ class ImageNarrator(object):
             '-num_images',
             self.num_images,
             '-gpuid',
-            '-1',
+            '0' if self.enable_gpu else '-1',
         ]
 
         print "INIT NEURALTALK2 CAPTIONING"
@@ -123,7 +125,7 @@ class ImageNarrator(object):
                 '-primetext',
                 prepped_caption,
                 '-gpuid',
-                '-1'
+                '0' if self.enable_gpu else '-1'
             ]
 
             rnn_proc = subprocess.Popen(rnn_cmd_list, stdout=PIPE, stderr=PIPE, cwd=self.rnn_lib_path)
