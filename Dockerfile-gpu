@@ -77,7 +77,12 @@ RUN cd /opt/neural-networks/ && \
 
 # Install flask
 RUN pip install flask-restful && \
-    pip install Flask-HTTPAuth
+    pip install Flask-HTTPAuth && \
+    pip install -U flask-cors
+
+# Install transloadit
+RUN apt-get -yqq install libcurl4-openssl-dev && \
+    pip install pytransloadit
 
 # Download neuraltalk2 and cahr-rnn
 RUN cd /opt/neural-networks && \
@@ -86,7 +91,7 @@ RUN cd /opt/neural-networks && \
     git clone "https://github.com/archzzz/neuraltalk2.git" && \
     git clone "https://github.com/karpathy/char-rnn.git"
 
-# fix torch TestSuite null
+# Fix torch TestSuite null
 RUN luarocks install torch
 
 # Add models
@@ -94,11 +99,17 @@ RUN mkdir /opt/neural-networks/models
 ADD models/*.t7 /opt/neural-networks/models/
 
 RUN pip install firebase-admin
-ADD $FIREBASE_CREDENTIAL /opt/neural-networks/firebase-key.json
+ADD config/$FIREBASE_CREDENTIAL /opt/neural-networks/firebase-key.json
 
 RUN cd /opt/ && \
     mkdir server
 ADD src /opt/server/src
+
+# Add app configurations
+RUN mkdir /opt/server/config
+ADD "config/app.default_settings" /opt/server/config/app.default_settings
+ADD "config/app_docker_gpu.cfg" /opt/server/config/app_docker_gpu.cfg
+ENV POND_SERVICE_SETTINGS="/opt/server/config/app_docker_gpu.cfg"
 
 ENV LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
 
@@ -109,4 +120,4 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 expose 5000
 
 
-CMD [ "python", "-u", "/opt/server/src/brittanyService.py"]
+CMD [ "python", "-u", "/opt/server/src/poetryApi.py"]

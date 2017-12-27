@@ -4,7 +4,7 @@ MAINTAINER Samuel Cozannet <samuel.cozannet@madeden.com>
 
 ENV MODEL_NEURALTALK "https://s3.amazonaws.com/rossgoodwin/models/2016-01-12_neuraltalk2_model_01_rg.t7"
 ENV MODEL_CHARNN "https://s3.amazonaws.com/rossgoodwin/models/2016-01-12_char-rnn_model_01_rg.t7"
-ENV FIREBASE_CREDENTIAL "blazing-heat-1438-firebase-adminsdk-h3irc-12eaf69af0.json"
+ENV FIREBASE_CREDENTIAL "config/blazing-heat-1438-firebase-adminsdk-h3irc-12eaf69af0.json"
 
 RUN apt-get update 
 RUN sudo apt-get -y install \
@@ -69,7 +69,8 @@ RUN pip install flask-restful && \
     pip install -U flask-cors
 
 # Install transloadit
-RUN pip install pytransloadit
+RUN apt-get -yqq install libcurl4-openssl-dev && \
+    pip install pytransloadit
 
 # Download neuraltalk2 and cahr-rnn
 RUN cd /opt/neural-networks && \
@@ -78,20 +79,27 @@ RUN cd /opt/neural-networks && \
     git clone "https://github.com/archzzz/neuraltalk2.git" && \
     git clone "https://github.com/karpathy/char-rnn.git"
 
-# Download modals
+# Download models
 RUN cd /opt/neural-networks && \
     mkdir models && \
     cd models && \
     wget $MODEL_NEURALTALK && \
     wget $MODEL_CHARNN
 
+# Install and initialize firebase
 RUN pip install firebase-admin
 ADD $FIREBASE_CREDENTIAL /opt/neural-networks/firebase-key.json
-ADD "app-config.cfg" /opt/neural-networks/app-config.cfg
 
+# Add source code
 RUN cd /opt/ && \
     mkdir server
 ADD src /opt/server/src
+
+# Add app configurations
+RUN mkdir /opt/server/config
+ADD "config/app.default_settings" /opt/server/config/app.default_settings
+ADD "config/app_docker.cfg" /opt/server/config/app_docker.cfg
+ENV POND_SERVICE_SETTINGS="/opt/server/config/app_docker.cfg"
 
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -100,4 +108,4 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 expose 5000
 
 
-CMD [ "python", "-u", "/opt/server/src/pondService.py"]
+CMD [ "python", "-u", "/opt/server/src/poetryApi.py"]

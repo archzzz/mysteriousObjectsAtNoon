@@ -16,7 +16,8 @@ CORS(app)
 api = Api(app)
 http_token_auth = HTTPTokenAuth(scheme='Token')
 
-app.config.from_pyfile("../app-config.cfg")
+app.config.from_pyfile("../config/app.default_settings")
+app.config.from_envvar("POND_SERVICE_SETTINGS")
 
 cred = credentials.Certificate(app.config["FIREBASE_CREDENTIAL"])
 firebase_app = initialize_app(cred)
@@ -82,7 +83,9 @@ class CaptionApi(Resource):
             abort(400, "Invalid input type: image or audio")
 
         with TemporaryDirectory() as temp_dir:
-            assembly = transloadit_client.new_assembly(params={"template_id": app.config['TRANSLOADIT_TEMPLATE_ID']})
+            assembly = transloadit_client.new_assembly(params={
+                "template_id": app.config['TRANSLOADIT_THUMBNAIL_TEMPLATE_ID'],
+            })
             assembly.add_step("imported", "/http/import", {"url": args[VIDEO_URI]})
             assembly.add_step('thumbnailed', "/video/thumbs", {"count": args[VIDEO_DURATION] // 2})
 
