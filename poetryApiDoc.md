@@ -58,9 +58,9 @@ request.get('/poetry')
 
 * **URL Params**
 
-	`videoUri - uri to download the image from s3`
-	`mime - video mime type`
-	`duration - video duration in seconds`
+	`videoUri - uri to download the image from s3`  
+	`mime - video mime type`  
+	`duration - video duration in seconds`  
 
 * **Header Params**
 
