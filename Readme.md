@@ -26,9 +26,7 @@
   * **Content:** `{poetry: <poetry content>}`
 
 * **Error Response**
-  * **Code:** 400 Bad Request
-  * **Code:** 401 Unauthorized    
-  * **Code:** 404 Not Found  
+  * **Code:** 400 Invalid input 
 
 * **Sample Usage**
 
@@ -72,9 +70,7 @@ request.get('/poetry')
   * **Content:** `{poetry: <poetry content>}`
 
 * **Error Response**
-  * **Code:** 400 Bad Request
-  * **Code:** 401 Unauthorized    
-  * **Code:** 404 Not Found  
+  * **Code:** 400 Invalid input
 
 * **Sample Usage**
 
