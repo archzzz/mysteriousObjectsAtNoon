@@ -102,6 +102,10 @@ ADD models/char-rnn_model_gpu_01.t7 /opt/neural-networks/models/char-rnn_model_g
 RUN pip install firebase-admin
 ADD config/$FIREBASE_CREDENTIAL /opt/neural-networks/firebase-key.json
 
+# Install dependencies of firebasePython
+RUN pip install requests
+RUN pip install sseclient
+
 RUN cd /opt/ && \
     mkdir server
 ADD src /opt/server/src
